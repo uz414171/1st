@@ -1,0 +1,62 @@
+#!/usr/bin/python3
+
+import sceptrerestapi
+import argparse
+import time
+import csv
+import os
+
+sceptre = sceptrerestapi.Extras()
+
+def megahertz_type(value):
+    try:
+        return float(value) * 1e6  # Convert MHz to Hz
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"Invalid frequency value: {value}")
+
+def tune_to_frequency(freq, channel):
+    print(f"Tuning to {freq} Hz on Channel {channel}")
+
+    # Send message to Sceptre
+    sceptre.stream_change_freq(input=f"input_1.channel_{channel}", freq=int(freq))
+
+    # Log the activity
+    log_activity(freq, channel)
+
+def log_activity(freq, channel):
+    file_exists = os.path.isfile('activity_log.csv')
+    with open('activity_log.csv', mode='a', newline='') as file:
+        writer = csv.writer(file)
+        if not file_exists:
+            writer.writerow(['Frequency (Hz)', 'Channel'])
+        writer.writerow([freq, channel])
+
+def main():
+    freqs = []
+    channels = []
+
+    print("Enter frequencies in MHz and corresponding channels. Type 'done' when finished.")
+    while True:
+        freq = input("Enter the frequency in MHz (or type 'done' to finish): ")
+        if freq.lower() == 'done':
+            break
+        channel = input("Enter the channel: ")
+        
+        try:
+            freqs.append(megahertz_type(freq))
+            channels.append(int(channel))
+        except ValueError as e:
+            print(e)
+            continue
+
+    print("Starting scan. Press Ctrl+C to stop.")
+    try:
+        while True:
+            for freq, channel in zip(freqs, channels):
+                tune_to_frequency(freq, channel)
+                time.sleep(1)  # Adjust the sleep time as necessary
+    except KeyboardInterrupt:
+        print("Scan stopped.")
+
+if __name__ == "__main__":
+    main()
