@@ -1,0 +1,83 @@
+# Frequency Scanner
+
+This Python script allows you to tune to specified frequencies and channels using the Sceptre REST API. It logs each tuning action to a CSV file and continues scanning through the frequencies and channels until manually stopped.
+
+## Requirements
+
+- Python 3.x
+- `sceptrerestapi` module
+- `requests` module
+
+## Installation
+
+1. Clone this repository or download the script directly.
+2. Ensure you have the required Python modules installed. You can install them using pip:
+
+```bash
+pip install sceptrerestapi requests
+```
+
+## Usage
+
+### Running the Script
+
+To run the script, use the following command:
+
+```bash
+python3 frequency_scanner.py
+```
+
+### Inputting Frequencies and Channels
+
+1. The script will prompt you to enter frequencies in MHz and their corresponding channels.
+2. Enter the frequency and channel pairs one after another. For example:
+
+```
+Enter the frequency in MHz (or type 'done' to finish): 100
+Enter the channel: 1
+Enter the frequency in MHz (or type 'done' to finish): 200
+Enter the channel: 2
+```
+
+3. Type `done` when you have finished entering all the frequencies and channels.
+
+### Starting the Scan
+
+- After you finish inputting the frequencies and channels, the script will start scanning.
+- The script will tune to each frequency and channel pair, log the activity to `activity_log.csv`, and continue indefinitely.
+- To stop the scan, press `Ctrl+C`.
+
+### CSV Logging
+
+The script logs each tuning action to a CSV file named `activity_log.csv`. The file contains two columns: `Frequency (Hz)` and `Channel`.
+
+## Example
+
+Here's an example of how the script might run:
+
+```bash
+$ python3 frequency_scanner.py
+Enter frequencies in MHz and corresponding channels. Type 'done' when finished.
+Enter the frequency in MHz (or type 'done' to finish): 100
+Enter the channel: 1
+Enter the frequency in MHz (or type 'done' to finish): 200
+Enter the channel: 2
+Enter the frequency in MHz (or type 'done' to finish): done
+Starting scan. Press Ctrl+C to stop.
+Tuning to 100000000.0 Hz on Channel 1
+Tuning to 200000000.0 Hz on Channel 2
+...
+```
+
+## Notes
+
+- Ensure you have proper permissions and access to the Sceptre REST API.
+- Adjust the sleep time in the script if necessary to match your requirements.
+
+## License
+
+This project is licensed under the MIT License.
+
+---
+
+Save this as `README.md` in the same directory as your script.
